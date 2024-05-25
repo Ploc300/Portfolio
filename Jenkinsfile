@@ -23,9 +23,8 @@ pipeline{
             }
             steps {
                 echo 'Validating HTML, CSS, JS and Python files'
-                if (params.DEBUG == 'true') {
-                    echo 'Debug mode is enabled'
-                }
+                // Log the debug mode
+                echo "Debug mode is ${params.DEBUG}"
             }
         }
         stage('Build') {

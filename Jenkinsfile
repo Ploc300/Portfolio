@@ -19,7 +19,7 @@ pipeline{
             // }
             steps {
                 echo 'Validating HTML, CSS, JS and Python files'
-                echo 'Debug mode is ${DEBUG}'
+                echo 'Debug mode is ${params.DEBUG}'
             }
         }
         stage('Build') {

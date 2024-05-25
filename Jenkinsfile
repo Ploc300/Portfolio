@@ -4,8 +4,8 @@ pipeline{
         githubPush()
     }
     parameters {
-        booleanParam(name: 'DEBUG', defaultValue: 'false', description: 'Enable debug mode')
-        choice(name: 'PHASE', choices: ['all', 'validator', 'build', 'deploy', 'force_deploy'], description: 'Select the phase to run')
+        booleanParam(name: 'DEBUG', defaultValue: 'false', description: 'Enable debug mode', required: true)
+        choice(name: 'PHASE', choices: ['all', 'validator', 'build', 'deploy'], description: 'Select the phase to run')
     }
 
     stages {
@@ -18,14 +18,22 @@ pipeline{
             //     additionalBuildArgs '-e debug=${DEBUG}'
 
             // }
+            when {
+                expression { params.PHASE == 'all' || params.PHASE == 'validator' }
+            }
             steps {
                 echo 'Validating HTML, CSS, JS and Python files'
-                echo 'Debug mode is ${params.DEBUG}'
+                if (params.DEBUG == 'true') {
+                    echo 'Debug mode is enabled'
+                }
             }
         }
         stage('Build') {
             // This will build the docker image and push it to the docker hub
             agent any
+            when {
+                expression { params.PHASE == 'all' || params.PHASE == 'build' }
+            }
             steps {
                 echo 'Building the docker image'
             }
@@ -33,6 +41,9 @@ pipeline{
         stage('Deploy') {
             // This will deploy the docker image on the server
             agent any
+            when {
+                expression { params.PHASE == 'all' || params.PHASE == 'deploy' }
+            }
             steps {
                 echo 'Deploying the docker image'
             }

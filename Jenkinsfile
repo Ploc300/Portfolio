@@ -4,7 +4,8 @@ pipeline{
         githubPush()
     }
     parameters {
-        string(name: 'DEBUG', defaultValue: 'false', description: 'Enable debug mode')
+        booleanParam(name: 'DEBUG', defaultValue: 'false', description: 'Enable debug mode')
+        choice(name: 'PHASE', choices: ['all', 'validator', 'build', 'deploy', 'force_deploy'], description: 'Select the phase to run')
     }
 
     stages {

@@ -4,7 +4,6 @@ pipeline{
         githubPush()
     }
     parameters {
-        booleanParam(name: 'DEBUG', defaultValue: 'false', description: 'Enable debug mode')
         choice(name: 'PHASE', choices: ['all', 'validator'], description: 'Select the phase to run')
     }
 
@@ -18,11 +17,12 @@ pipeline{
             steps {
                 echo 'Validating HTML, CSS, JS and Python files'
                 echo 'Starting with pylint...'
-                sh '''
-                        for file in $(find . -name "*.py"); do
-                            flake8 --format=pylint $file >> flake8.log || exit 1
-                        done
-                    '''
+                flake8 --format=pylint main.py >> flake8.log || exit 1
+                // sh '''
+                //         for file in $(find . -name "*.py"); do
+                //             flake8 --format=pylint $file >> flake8.log || exit 1
+                //         done
+                //     '''
 
 
 

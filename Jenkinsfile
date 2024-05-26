@@ -5,33 +5,33 @@ pipeline{
     }
     parameters {
         booleanParam(name: 'DEBUG', defaultValue: 'false', description: 'Enable debug mode')
-        choice(name: 'PHASE', choices: ['all', 'validator', 'build', 'deploy'], description: 'Select the phase to run')
+        choice(name: 'PHASE', choices: ['all', 'validator'], description: 'Select the phase to run')
     }
 
     stages {
         stage('Validator') {
-            // This will validate the python, html, js and css files using W3C validator and pylint
-            // agent dockerfile {
-            //     filename 'Dockerfile'
-            //     dir 'docker/validator'
-            //     label 'docker-validator'
-            //     additionalBuildArgs '-e debug=${DEBUG}'
-
-            // }
+            // This will validate the HTML, CSS, JS and Python files
             when {
                 expression { params.PHASE == 'all' || params.PHASE == 'validator' }
             }
             steps {
                 echo 'Validating HTML, CSS, JS and Python files'
-                // Log the debug mode
-                echo "Debug mode is ${params.DEBUG}"
+                echo 'Starting with pylint...'
+                sh '''
+                        for file in $(find . -name "*.py"); do
+                            flake8 --format=pylint $file >> flake8.log || exit 1
+                        done
+                    '''
+
+
+
             }
         }
         stage('Build') {
             // This will build the docker image and push it to the docker hub
             agent any
             when {
-                expression { params.PHASE == 'all' || params.PHASE == 'build' }
+                expression { params.PHASE == 'all'}
             }
             steps {
                 echo 'Building the docker image'
@@ -41,11 +41,17 @@ pipeline{
             // This will deploy the docker image on the server
             agent any
             when {
-                expression { params.PHASE == 'all' || params.PHASE == 'deploy' }
+                expression { params.PHASE == 'all'}
             }
             steps {
                 echo 'Deploying the docker image'
             }
+        }
+    }
+
+    post {
+        always {
+            archiveArtifacts allowEmptyArchive: true, artifacts: 'flake8.log', fingerprint: true, followSymlinks: false
         }
     }
 }

@@ -10,6 +10,7 @@ pipeline{
 
     stages {
         stage('Validator') {
+            agent any
             // This will validate the HTML, CSS, JS and Python files
             when {
                 expression { params.PHASE == 'all' || params.PHASE == 'validator' }

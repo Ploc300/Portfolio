@@ -22,7 +22,7 @@ pipeline{
             steps {
                 script {
                     echo 'Validating the code'
-                    sh "pylint --msg-template='\\{path\\}:\\{line\\}: [\\{msg_id\\}, \\{obj\\}] \\{msg\\} (\\{symbol\\})' src/main.py > pylint.log"
+                    pylint --msg-template='\\{path\\}:\\{line\\}: [\\{msg_id\\}, \\{obj\\}] \\{msg\\} (\\{symbol\\})' src/main.py > pylint.log
                 }
             }
         }

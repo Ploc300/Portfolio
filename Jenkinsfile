@@ -22,6 +22,7 @@ pipeline{
             steps {
                 script {
                     echo 'Validating the code'
+                    pylint --msg-template='{path}:{line}: [{msg_id}, {obj}] {msg} ({symbol})' src/main.py > pylint.log
                 }
             }
         }
@@ -40,6 +41,14 @@ pipeline{
                     echo 'Deploying the docker image'
                 }
             }
+        }
+    }
+    post {
+        always {
+            echo 'Saving artifacts'
+            archiveArtifacts allowEmptyArchive: true, artifacts: 'pylint.log', fingerprint: true, followSymlinks: false
+            echo 'Cleaning up workspace'
+            cleanWs()
         }
     }
 }

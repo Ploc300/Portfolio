@@ -13,7 +13,7 @@ pipeline{
             // This will clone the repository
             steps {
                 echo 'Cloning the repository'
-                git 'https://github.com/Ploc300/Portfolio.git'
+                git clone 'https://github.com/Ploc300/Portfolio.git'
                 echo 'Repository cloned'
             }
         }

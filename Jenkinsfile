@@ -4,7 +4,25 @@ pipeline{
         githubPush()
     }
 
+    environment {
+        DOCKER_IMAGE = 'ploc300/portfolio:latest'
+    }
+
     stages {
+        stage('Clone') {
+            // This will clone the repository
+            steps {
+                echo 'Cloning the repository'
+                git 'https://github.com/Ploc300/Portfolio.git'
+                echo 'Repository cloned'
+            }
+        }
+        stage('Validate') {
+            // This will validate the code
+            steps {
+                echo 'Validating the code'
+            }
+        }
         stage('Build') {
             // This will build the docker image and push it to the docker hub
             steps {
@@ -16,12 +34,6 @@ pipeline{
             steps {
                 echo 'Deploying the docker image'
             }
-        }
-    }
-
-    post {
-        always {
-            archiveArtifacts allowEmptyArchive: true, artifacts: 'flake8.log', fingerprint: true, followSymlinks: false
         }
     }
 }

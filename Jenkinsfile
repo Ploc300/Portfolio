@@ -1,5 +1,7 @@
 pipeline{
-    agent any
+    agent node {
+        label 'docker-agent'
+    }
     triggers {
         githubPush()
     }
@@ -9,12 +11,17 @@ pipeline{
     }
 
     stages {
-        stage('Clone') {
+        stage('Setup') {
             // This will clone the repository
             steps {
-                echo 'Cloning the repository'
+                echo '===== Cloning the repository ====='
                 git(url: 'https://github.com/Ploc300/Portfolio.git', branch: 'main')
                 echo 'Repository cloned'
+                echo '===== Setting up the environment ====='
+                sh 'apt-get install - y python3.12.3'
+                sh 'pip install pylint'
+                sh 'pip install -r src/requirements.txt'
+                echo 'Environment setup completed'
             }
         }
         stage('Validate') {
@@ -47,8 +54,6 @@ pipeline{
         always {
             echo 'Saving artifacts'
             archiveArtifacts allowEmptyArchive: true, artifacts: 'pylint.log', fingerprint: true, followSymlinks: false
-            echo 'Cleaning up workspace'
-            cleanWs()
         }
     }
 }

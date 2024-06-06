@@ -18,6 +18,7 @@ pipeline{
                 git(url: 'https://github.com/Ploc300/Portfolio.git', branch: 'main')
                 echo 'Repository cloned'
                 echo '===== Setting up the environment ====='
+                sh 'whoami'
                 sh 'pip install pylint'
                 sh 'pip install -r src/requirements.txt'
                 echo 'Environment setup completed'

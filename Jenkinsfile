@@ -20,6 +20,8 @@ pipeline{
                 echo 'Repository cloned'
                 echo '===== Setting up the environment ====='
                 sh 'python3 -m venv plocfolio'
+                sh 'pwd'
+                sh 'ls -l'
                 sh 'plocfolio/Scripts/activate.bat'
                 sh 'pip install pylint'
                 sh 'pip install -r src/requirements.txt'

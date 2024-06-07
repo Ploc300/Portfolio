@@ -20,7 +20,7 @@ pipeline{
                 echo 'Repository cloned'
                 echo '===== Setting up the environment ====='
                 sh 'python3 -m venv plocfolio'
-                sh 'source plocfolio/bin/activate'
+                sh 'plocfolio/Scripts/activate.bat'
                 sh 'pip install pylint'
                 sh 'pip install -r src/requirements.txt'
                 echo 'Environment setup completed'
@@ -57,7 +57,7 @@ pipeline{
             archiveArtifacts allowEmptyArchive: true, artifacts: 'pylint.log', fingerprint: true, followSymlinks: false
 
             echo '===== Cleaning up the environment ====='
-            sh 'deactivate'
+            sh 'plodfolio/Scripts/deactivate.bat'
             sh 'rm -rf plocfolio'
         }
     }

@@ -22,7 +22,6 @@ pipeline{
                 withPythonEnv('python3') {
                     sh 'pip install pylint'
                     sh 'pip install -r src/requirements.txt'
-
                 }
                 echo 'Environment setup completed'
             }
@@ -32,6 +31,9 @@ pipeline{
             steps {
                 script {
                     echo '===== Validating the code ====='
+                    withPythonEnv('python3') {
+                        sh 'pylint src/*.py > pylint.log'
+                    }
                 }
             }
         }
@@ -56,10 +58,5 @@ pipeline{
         always {
             echo '===== Saving the artifacts ====='
             archiveArtifacts allowEmptyArchive: true, artifacts: 'pylint.log', fingerprint: true, followSymlinks: false
-
-            echo '===== Cleaning up the environment ====='
-            // sh 'plodfolio/Scripts/deactivate.bat'
-            // sh 'rm -rf plocfolio'
-        }
     }
 }

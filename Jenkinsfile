@@ -34,7 +34,7 @@ pipeline {
                     withPythonEnv("python3") {
                     sh "pylint src/*.py"
                     echo "Code validated"
-                }
+                    }
                 }
             }
         }
@@ -43,6 +43,7 @@ pipeline {
             steps {
                 script {
                     echo "===== Building the docker image ====="
+                    sh "docker build -t $DOCKER_IMAGE ."
                 }
             }
         }
@@ -51,6 +52,7 @@ pipeline {
             steps {
                 script {
                     echo "===== Deploying the docker image ====="
+                    sh "docker run -d -p 80:80 $DOCKER_IMAGE"
                 }
             }
         }

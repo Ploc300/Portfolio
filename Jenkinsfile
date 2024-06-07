@@ -14,10 +14,13 @@ pipeline{
         stage('Setup') {
             // This will clone the repository
             steps {
+                echo '===== Setup stage started ====='
                 echo '===== Cloning the repository ====='
                 git(url: 'https://github.com/Ploc300/Portfolio.git', branch: 'main')
                 echo 'Repository cloned'
                 echo '===== Setting up the environment ====='
+                sh 'python3 -m venv plocfolio'
+                sh 'source plocfolio/bin/activate'
                 sh 'pip install pylint'
                 sh 'pip install -r src/requirements.txt'
                 echo 'Environment setup completed'
@@ -27,7 +30,7 @@ pipeline{
             // This will validate the code
             steps {
                 script {
-                    echo 'Validating the code'
+                    echo '===== Validating the code ====='
                 }
             }
         }
@@ -35,7 +38,7 @@ pipeline{
             // This will build the docker image and push it to the docker hub
             steps {
                 script {
-                    echo 'Building the docker image'
+                    echo '===== Building the docker image ====='
                 }
             }
         }
@@ -43,15 +46,19 @@ pipeline{
             // This will deploy the docker image on the server
             steps {
                 script {
-                    echo 'Deploying the docker image'
+                    echo '===== Deploying the docker image ====='
                 }
             }
         }
     }
     post {
         always {
-            echo 'Saving artifacts'
+            echo '===== Saving the artifacts ====='
             archiveArtifacts allowEmptyArchive: true, artifacts: 'pylint.log', fingerprint: true, followSymlinks: false
+
+            echo '===== Cleaning up the environment ====='
+            sh 'deactivate'
+            sh 'rm -rf plocfolio'
         }
     }
 }

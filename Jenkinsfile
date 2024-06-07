@@ -32,7 +32,7 @@ pipeline {
                 script {
                     echo "===== Validating the code ====="
                     withPythonEnv("python3") {
-                    sh "pylint src/*.py > pylint.log"
+                    sh "pylint src/*.py"
                     echo "Code validated"
                 }
                 }

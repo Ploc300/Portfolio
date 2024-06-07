@@ -19,10 +19,11 @@ pipeline{
                 git(url: 'https://github.com/Ploc300/Portfolio.git', branch: 'main')
                 echo 'Repository cloned'
                 echo '===== Setting up the environment ====='
-                sh 'python3 -m venv plocfolio'
-                sh 'source plocfolio/bin/activate'
-                sh 'pip install pylint'
-                sh 'pip install -r src/requirements.txt'
+                withPythonEnv('python3') {
+                    sh 'pip install pylint'
+                    sh 'pip install -r src/requirements.txt'
+
+                }
                 echo 'Environment setup completed'
             }
         }

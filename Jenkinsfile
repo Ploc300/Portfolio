@@ -57,8 +57,8 @@ pipeline{
             archiveArtifacts allowEmptyArchive: true, artifacts: 'pylint.log', fingerprint: true, followSymlinks: false
 
             echo '===== Cleaning up the environment ====='
-            sh 'plodfolio/Scripts/deactivate.bat'
-            sh 'rm -rf plocfolio'
+            // sh 'plodfolio/Scripts/deactivate.bat'
+            // sh 'rm -rf plocfolio'
         }
     }
 }
